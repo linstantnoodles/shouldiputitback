@@ -8,10 +8,20 @@ from diskcache import Cache
 
 cache = Cache('tmp')
 
-def query_items_from_source(url, query, limit=None): 
+def get_items(query, num_pages=1):
+    search_url = get_search_url(query)
+    items = []
+    for i in range(1, num_pages+1):
+        paginated_url = f"{search_url}&max_id={i}"
+        items.extend(query_items_from_source(paginated_url, query))
+    return items
+
+def get_search_url(query):
+    base_url = f"https://poshmark.com/search?query={query}"
     params = "&department=Women&availability=sold_out&sort_by=best_match&all_size=true&my_size=false"
-    full_url = f"{url}{params}"
-    print(f"Querying items from {full_url}")
+    return f"{base_url}{params}"
+
+def query_items_from_source(full_url, query, limit=None): 
     with Cache(cache.directory) as reference:
         results = reference.get(full_url)
         if results:
@@ -23,13 +33,24 @@ def query_items_from_source(url, query, limit=None):
     limit = limit or len(cards)
     for card in cards[:limit]:
         item_path = card.find("a", class_="tile__covershot")['href']
-        try: 
-            info = item_information(item_path)
-            results.append(info)
-        except Exception as e:
-            print(f"Error: {e} for {item_path}")
+        title = card.find("a", class_="tile__title tc--b").text.strip()
+        new_with_tag = True if card.find("span", class_="condition-tag") else False
+        image_url = card.find("div", class_="img__container").find("img")["data-src"]
+        sold_price = card.find("div", class_="item__details").find("span", class_="fw--bold").text.replace("$","").replace(",","").strip()
+        print(sold_price)
+        size_element = card.find("a", class_="tile__details__pipe__size") or card.find("div", class_="tile__details__pipe__size")
+        size = size_element.text.strip()
+        res = {
+            "title": title,
+            "url": f"https://poshmark.com{item_path}",
+            "image_url": image_url,
+            "sold_price": sold_price,
+            "new_with_tag": new_with_tag,
+            "size": size
+        }
+        results.append(res)
     with Cache(cache.directory) as reference:
-        reference.set(full_url, json.dumps(results), expire=3600)
+        reference.set(full_url, json.dumps(results), expire=3600*24)
     return process_data(results, query)
 
 def process_data(data, query):
@@ -46,43 +67,22 @@ def process_data(data, query):
     return data
     
 def analytics(data):
-    targetCategories = set(["Accessories",
-        "Bags",
-        "Dresses",
-        "Intimates & Sleepwear",
-        "Jackets & Coats",
-        "Jeans",
-        "Jewelry",
-        "Makeup",
-        "Pants & Jumpsuits",
-        "Shoes",
-        "Shorts",
-        "Skirts",
-        "Sweaters",
-        "Swim",
-        "Tops",
-        "Skincare",
-        "Hair",
-        "Bath & Body",
-        "all"
-    ])
-    categories = set([])
-    for item in data:
-        for t in item["tags"]:
-            if t in targetCategories:
-                categories.add(t)
-    res = {
-        "averages": {
-            "all": {
-                "count": len(data),
-                "avg": Average([int(x["sold_price"]) for x in data])
-            }
-        }
+    # For sales under $15, the fee is a flat rate of $2.95. For sales above $15, the fee is 20% and you keep 80%.
+    def fee_amt(num):
+        if num < 15:
+            return 2.95
+        else:
+            return (0.2 * num)
+    avg_price = Average([int(x["sold_price"]) for x in data])
+    total_count = len(data)
+    fee = round(fee_amt(avg_price), 2)
+    net = avg_price - fee
+    return {
+        "count": total_count,
+        "avg": avg_price,
+        "fee": fee,
+        "net": net
     }
-    exclude = set(["Women"]) 
-    for c in [x for x in categories if x not in exclude]:
-        res["averages"][c] = avg_price(c, data)
-    return res
 
 def Average(lst):
     return round(sum(lst) / len(lst), 2)
@@ -146,5 +146,6 @@ if __name__ == '__main__':
     args = argument_parser.parse_args()
     query = urllib.parse.quote(args.query)
     url = f"https://poshmark.com/search?query={query}"
-    query_items_from_source(url, args.query)
+    res = query_items_from_source(url, args.query)
+    print(res)
 

@@ -11,7 +11,28 @@ def index():
 
 @app.route('/search')
 def search():
-    return (request.args['query'])
+    query, cost, pages = request.args['query'], request.args['cost'], request.args['pages']
+    items = query_lib.get_items(query, num_pages=int(pages))
+    link_to_results = query_lib.get_search_url(query)
+    statistics = query_lib.analytics(items)
+    num_items = len(items)
+    selling_fee_amt = statistics["fee"]
+    avg_item_sold_price = statistics["avg"]
+    avg_item_revenue = round(statistics["net"], 2)
+    breakeven_price = round((float(cost) / 0.8), 2) if cost else None
+    return render_template(
+        "search.html",
+        items = items,
+        query = query,
+        link_to_results = link_to_results,
+        cost = cost,
+        num_items = num_items,
+        selling_fee_amt = selling_fee_amt,
+        avg_item_sold_price = avg_item_sold_price,
+        avg_item_revenue = avg_item_revenue,
+        breakeven_price = breakeven_price,
+        pages = pages,
+    )
 
 @app.route('/time')
 def get_current_time():

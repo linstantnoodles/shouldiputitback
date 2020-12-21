@@ -16,13 +16,12 @@
     <div class="row">
       <div class="" style="margin-top: 5%">
         <h1><a href="/">Should I put it back?</a></h1>
-        <p>Put in a search and find out.</p>
         <div>
             <form action="{{ url_for('search') }}" method="GET">
               <div class="row">
                   <div class="six columns">
                       <label for="search">Search sold items</label>
-                      <input name="query" class="u-full-width" type="text" id="search" autofocus required>
+                      <input name="query" class="u-full-width" type="text" value="{{ query }}" id="search" required>
                   </div>
                   <div class="three columns">
                       <label for="cost">Item Cost (Optional)</label>
@@ -30,17 +29,39 @@
                   </div>
                   <div class="three columns">
                       <label for="pages">Pages</label>
-                      <input class="u-full-width" name="pages" type="number" id="pages" min="1" max="5" value="1">
+                      <input class="u-full-width" name="pages" type="number" id="pages" min="1" max="5" value="1" value="{{ pages }}">
                   </div>
               </div>
-              <button type="submit" class="button button-primary">Search</button>
-              <button id="reset-search">Reset search query</button>
+                <button type="submit" class="button button-primary">Search</button>
+                <button id="reset-search">Reset search query</button>
+                <a href="{{ link_to_results }}" target="_blank">Link to results</a>
             </form>
+        </div>
+        <div>
+            <ul>
+                <li><strong>${{ avg_item_sold_price }}</strong> is the average sold price based on {{ num_items }} items found.</li>
+                <li><strong>${{ avg_item_revenue }}</strong> is what sellers earn on average after ${{ selling_fee_amt }} fees.</li>
+                <li><strong>${{ breakeven_price }}</strong> is the break even selling price based on your item cost.</li>
+            </ul>
+        </div>
+        <div class="flex flex-wrap">
+        {% for item in items %}
+            <div class="item">
+                <img src="{{ item.image_url }}"/>
+                <a class="title" href="{{ item.url }}" target="_blank">{{ item.title }}</a>
+                <span class="price"><strong>${{ item.sold_price }}</strong>
+                    <span class="size">{{ item.size }}</span>
+                    {% if item.new_with_tag %}
+                    <span class="condition">NWT</span>
+                    {% endif %}
+                </span>
+            </div>
+        {% endfor %}
         </div>
       </div>
     </div>
   </div>
-    <script type="text/javascript">
+  <script type="text/javascript">
       let resetSearchButton = document.getElementById("reset-search");
       let searchField = document.getElementById("search");
       resetSearchButton.addEventListener("click", function(e) {
@@ -49,6 +70,5 @@
           searchField.focus();
       });
   </script>
-
 </body>
 </html>
