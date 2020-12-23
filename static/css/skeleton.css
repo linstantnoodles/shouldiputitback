@@ -499,7 +499,7 @@ body {
   position: fixed;
   position: sticky;
   pointer-events: all;
-  top: calc(100vh - 5rem);
+  top: calc(100vh - 10rem);
   display: inline-block;
   text-decoration: none;
   font-size: 2rem;
