@@ -14,7 +14,7 @@ def get_items(query, num_pages=1):
     for i in range(1, num_pages+1):
         paginated_url = f"{search_url}&max_id={i}"
         items.extend(query_items_from_source(paginated_url, query))
-    return items
+    return sorted(items, key=lambda x: int(x["sold_price"]), reverse=True)
 
 def get_search_url(query):
     base_url = f"https://poshmark.com/search?query={query}"
@@ -25,7 +25,7 @@ def query_items_from_source(full_url, query, limit=None):
     with Cache(cache.directory) as reference:
         results = reference.get(full_url)
         if results:
-            return process_data(json.loads(results), query)
+            return json.loads(results)
     response = requests.get(full_url) 
     data_soup = BeautifulSoup(response.text, features="html.parser")
     cards = data_soup.find_all("div", class_="card card--small")
@@ -51,21 +51,8 @@ def query_items_from_source(full_url, query, limit=None):
         results.append(res)
     with Cache(cache.directory) as reference:
         reference.set(full_url, json.dumps(results), expire=3600*24)
-    return process_data(results, query)
+    return results
 
-def process_data(data, query):
-    query = query.lower()
-    query_items = set([q.strip() for q in query.split(" ")])
-    data = sorted(data, key=lambda x: int(x["sold_price"]), reverse=True)
-    # filtered_data = []
-    # for d in data:
-    #     title =  d['title']
-    #     details =  d['details']
-    #     body = (title + details).lower()
-    #     filtered_data.append(d)
-    # data = filtered_data
-    return data
-    
 def analytics(data):
     if not data:
         return {}
