@@ -67,6 +67,8 @@ def process_data(data, query):
     return data
     
 def analytics(data):
+    if not data:
+        return {}
     # For sales under $15, the fee is a flat rate of $2.95. For sales above $15, the fee is 20% and you keep 80%.
     def fee_amt(num):
         if num < 15:
@@ -76,7 +78,7 @@ def analytics(data):
     avg_price = Average([int(x["sold_price"]) for x in data])
     total_count = len(data)
     fee = round(fee_amt(avg_price), 2)
-    net = avg_price - fee
+    net = round(avg_price - fee, 2)
     return {
         "count": total_count,
         "avg": avg_price,

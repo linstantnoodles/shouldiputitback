@@ -11,15 +11,15 @@ def index():
 
 @app.route('/search')
 def search():
-    query, cost, pages = request.args['query'], request.args['cost'], request.args['pages']
+    query, cost, pages = request.args['query'], request.args.get('cost', None), request.args.get('pages', 1)
     items = query_lib.get_items(query, num_pages=int(pages))
     link_to_results = query_lib.get_search_url(query)
     statistics = query_lib.analytics(items)
     num_items = len(items)
-    selling_fee_amt = statistics["fee"]
-    avg_item_sold_price = statistics["avg"]
-    avg_item_revenue = round(statistics["net"], 2)
-    breakeven_price = round((float(cost) / 0.8), 2) if cost else None
+    selling_fee_amt = statistics.get("fee")
+    avg_item_sold_price = statistics.get("avg")
+    avg_item_revenue = statistics.get("net")
+    breakeven_price = '{:,.2f}'.format(round((float(cost) / 0.8), 2)) if cost else None
     return render_template(
         "search.html",
         items = items,

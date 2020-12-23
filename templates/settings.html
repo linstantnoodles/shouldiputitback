@@ -14,23 +14,29 @@
 <body>
   <div class="container">
     <div class="row">
-      <div class="" style="margin-top: 5%">
+      <div>
         <h1><a href="/">Should I put it back?</a></h1>
         <form action="{{ url_for('search') }}" method="GET">
             <div class="flex flex-col">
                 <div>
                     <label for="search">Search sold items</label>
-                    <input name="query" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="u-full-width" type="search" value="{{ query }}" id="search" required>
+                    <input name="query" class="u-full-width" type="search" value="{{ query }}" id="search" required>
                     
                 </div>
                 <div class="flex flex-row justify-start">
                     <button id="search-button" type="submit" class="button button-primary">Search</button>
                     <button id="reset-search">Clear</button>
                 </div>
+                <div>
+                    <label for="cost">Item Cost (Optional)</label>
+                    <input class="u-full-width" name="cost" type="number" id="cost" min="0" max="10000" step="0.01" value="{{ cost }}">
+                </div>
+                <div>
+                    <label for="pages">Pages</label>
+                    <input class="u-full-width" name="pages" type="number" id="pages" min="1" max="5" value="1" value="{{ pages }}">
+                </div>
+                <a href="{{ link_to_results }}" target="_blank">Link to results</a>
             </div>
-            <input name="cost" type="hidden" value="{{ cost }}">
-            <input class="u-full-width" name="pages" type="hidden" value="{{ pages }}">
-            <a href="{{ link_to_results }}" target="_blank">Link to results (page 1/{{ pages }})</a>
         </form>
         {% if items %}
             <div>
@@ -38,7 +44,7 @@
                     <li><strong>${{ avg_item_sold_price }}</strong> is the average sold price based on {{ num_items }} items found.</li>
                     <li><strong>${{ avg_item_revenue }}</strong> is what sellers earn on average after ${{ selling_fee_amt }} fees.</li>
                     {% if cost %}
-                    <li><strong>${{ breakeven_price }}</strong> is the break even selling price based on your item cost of ${{ cost }}.</li>
+                    <li><strong>${{ breakeven_price }}</strong> is the break even selling price based on your item cost.</li>
                     {% endif %}
                 </ul>
             </div>
