@@ -449,6 +449,11 @@ there.
     }
 }
 
+.item {
+    margin-bottom: 2rem;
+}
+
+
 
 .item > img {
     display: block;
