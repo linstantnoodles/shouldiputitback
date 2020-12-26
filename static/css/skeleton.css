@@ -486,10 +486,13 @@ body {
 
 #reset-search {
     flex-grow: 1;
-    background-color: lime;
+    background-color: #ccc;
 }
-/*https://moderncss.dev/pure-css-smooth-scroll-back-to-top/*/
 
+/*
+ * Back to top button
+ * Source: https://moderncss.dev/pure-css-smooth-scroll-back-to-top
+ **/
 @media screen and (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
@@ -497,7 +500,7 @@ body {
 }
 
 .back-to-top-link {
-  position: fixed;
+    position: fixed;
     position: sticky;
     color: black;
     pointer-events: all;
@@ -513,12 +516,12 @@ body {
     background-color: floralwhite;
     padding: 0.25rem;
     border: solid;
-  }
+}
 
 .back-to-top-wrapper {
   position: absolute;
   top: 100vh;
-  right: 5rem;
+  right: 4rem;
   bottom: -5em;
   width: 3em;
   pointer-events: none;
