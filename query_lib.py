@@ -8,17 +8,20 @@ from diskcache import Cache
 
 cache = Cache('tmp')
 
-def get_items(query, num_pages=1):
-    search_url = get_search_url(query)
+def get_items(query, num_pages=1, filter="sold"):
+    search_url = get_search_url(query, filter=filter)
     items = []
     for i in range(1, num_pages+1):
         paginated_url = f"{search_url}&max_id={i}"
         items.extend(query_items_from_source(paginated_url, query))
-    return sorted(items, key=lambda x: int(x["sold_price"]), reverse=True)
+    return sorted(items, key=lambda x: int(x["price"]), reverse=True)
 
-def get_search_url(query):
+def get_search_url(query, filter="sold"):
     base_url = f"https://poshmark.com/search?query={query}"
-    params = "&department=Women&availability=sold_out&sort_by=best_match&all_size=true&my_size=false"
+    if filter == "available":
+        params = "&department=Women&sort_by=best_match&all_size=true&my_size=false"
+    else:
+        params = "&department=Women&availability=sold_out&sort_by=best_match&all_size=true&my_size=false"
     return f"{base_url}{params}"
 
 def query_items_from_source(full_url, query, limit=None): 
@@ -36,15 +39,14 @@ def query_items_from_source(full_url, query, limit=None):
         title = card.find("a", class_="tile__title tc--b").text.strip()
         new_with_tag = True if card.find("span", class_="condition-tag") else False
         image_url = card.find("div", class_="img__container").find("img")["data-src"]
-        sold_price = card.find("div", class_="item__details").find("span", class_="fw--bold").text.replace("$","").replace(",","").strip()
-        print(sold_price)
+        price = card.find("div", class_="item__details").find("span", class_="fw--bold").text.replace("$","").replace(",","").strip()
         size_element = card.find("a", class_="tile__details__pipe__size") or card.find("div", class_="tile__details__pipe__size")
         size = size_element.text.strip()
         res = {
             "title": title,
             "url": f"https://poshmark.com{item_path}",
             "image_url": image_url,
-            "sold_price": sold_price,
+            "price": price,
             "new_with_tag": new_with_tag,
             "size": size
         }
@@ -62,7 +64,7 @@ def analytics(data):
             return 2.95
         else:
             return (0.2 * num)
-    avg_price = Average([int(x["sold_price"]) for x in data])
+    avg_price = Average([int(x["price"]) for x in data])
     total_count = len(data)
     fee = round(fee_amt(avg_price), 2)
     net = round(avg_price - fee, 2)
@@ -81,7 +83,7 @@ def avg_price(c, data):
     for d in data:
         if c in d["tags"]:
             matches.append(d)
-    sps = [int(x["sold_price"]) for x in matches]
+    sps = [int(x["price"]) for x in matches]
     return {
         "count": len(sps),
         "avg": Average(sps)

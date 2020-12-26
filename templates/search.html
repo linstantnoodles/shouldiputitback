@@ -19,9 +19,26 @@
         <form action="{{ url_for('search') }}" method="GET">
             <div class="flex flex-col">
                 <div>
-                    <label for="search">Search sold items</label>
-                    <input name="query" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="u-full-width" type="search" value="{{ query }}" id="search" required>
-                    
+                    <div id="search-input-group">
+                        <label for="search">Search</label>
+                        <input name="query" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="u-full-width" type="search" value="{{ query }}" id="search" required>
+                    </div>
+                </div>
+                <div id="filter-input-group" class="flex flex-row">
+                    <label for="sold">Sold
+                        {% if filter == "sold" %}
+                            <input type="radio" id="sold" name="filter" value="sold" checked="checked">
+                        {% else %}
+                            <input type="radio" id="sold" name="filter" value="sold">
+                        {% endif %}
+                    </label>
+                    <label for="available">Available
+                        {% if filter == "available" %}
+                            <input type="radio" id="available" name="filter" value="available" checked="checked">
+                        {% else %}
+                            <input type="radio" id="available" name="filter" value="available">
+                        {% endif %}
+                    </label>
                 </div>
                 <div class="flex flex-row justify-start">
                     <button id="search-button" type="submit" class="button button-primary">Search</button>
@@ -30,31 +47,39 @@
             </div>
             <input name="cost" type="hidden" value="{{ cost }}">
             <input class="u-full-width" name="pages" type="hidden" value="{{ pages }}">
-            <a href="{{ link_to_results }}" target="_blank">Link to results (page 1/{{ pages }})</a>
+            <a href="{{ link_to_results }}" target="_blank">Link to results (page 1)</a>
         </form>
         {% if items %}
-            <div>
-                <ul>
-                    <li><strong>${{ avg_item_sold_price }}</strong> is the average sold price based on {{ num_items }} items.</li>
-                    <li><strong>${{ avg_item_revenue }}</strong> is what sellers earn on average after ${{ selling_fee_amt }} fees.</li>
-                    {% if cost %}
-                    <li><strong>${{ breakeven_price }}</strong> is the break even selling price based on your item cost of ${{ cost }}.</li>
-                    {% endif %}
-                </ul>
-            </div>
-            <div class="flex flex-wrap">
-            {% for item in items %}
-                <div class="item">
-                    <img src="{{ item.image_url }}"/>
-                    <a class="title" href="{{ item.url }}" target="_blank">{{ item.title }}</a>
-                    <span class="price"><strong>${{ item.sold_price }}</strong>
-                        <span class="size">{{ item.size }}</span>
-                        {% if item.new_with_tag %}
-                        <span class="condition">NWT</span>
+            {% if filter == "sold" %}
+                <div>
+                    <ul>
+                        <li><strong>${{ avg_item_price }}</strong> is the average sold price based on {{ num_items }} items.</li>
+                        <li><strong>${{ avg_item_revenue }}</strong> is what sellers earn on average after ${{ selling_fee_amt }} fees.</li>
+                        {% if cost %}
+                        <li><strong>${{ breakeven_price }}</strong> is the break even selling price based on your item cost of ${{ cost }}.</li>
                         {% endif %}
-                    </span>
+                    </ul>
                 </div>
-            {% endfor %}
+            {% else %}
+                <div>
+                    <ul>
+                        <li><strong>${{ avg_item_price }}</strong> is the average list price based on {{ num_items }} items.</li>
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="flex flex-wrap">
+                {% for item in items %}
+                    <div class="item">
+                        <img src="{{ item.image_url }}"/>
+                        <a class="title" href="{{ item.url }}" target="_blank">{{ item.title }}</a>
+                        <span class="price"><strong>${{ item.price }}</strong>
+                            <span class="size">{{ item.size }}</span>
+                            {% if item.new_with_tag %}
+                            <span class="condition">NWT</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                {% endfor %}
             </div>
             <div class="back-to-top-wrapper">
                 <a href="#top" class="back-to-top-link" aria-label="Scroll to Top">🔝</a>
