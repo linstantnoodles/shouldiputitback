@@ -18,7 +18,7 @@
   <div id="top" class="container">
     <div class="row">
       <div style="margin-top: 5%">
-        <h1><a href="/">Should I put it back?</a></h1>
+        <h1><a href="/">🔮 Comp Crystal Ball 🔮</a></h1>
         <form action="{{ url_for('search') }}" method="GET">
             <div class="flex flex-col">
                 <div>
@@ -50,7 +50,7 @@
             </div>
             <input name="cost" type="hidden" value="{{ cost }}">
             <input class="u-full-width" name="pages" type="hidden" value="{{ pages }}">
-            <a href="{{ link_to_results }}" target="_blank">Link to results (page 1)</a>
+            <a href="{{ link_to_results }}" target="_blank">Link to search results on Poshmark.com</a>
         </form>
         {% if items %}
             {% if filter == "sold" %}

@@ -30,6 +30,11 @@
     src: url('/static/fonts/FontdinerdotcomSparkly-x37m.ttf'); 
 }
 
+@font-face { 
+    font-family: "lovelo"; 
+    src: url('/static/fonts/Lovelo/TTF/Lovelo-Black.ttf'); 
+}
+
 /* Grid
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .container {
@@ -539,5 +544,17 @@ header a {
     font-family: "sparkly";
     font-size: 5rem;
     text-decoration: none;
-    margin-left: 3rem;
+    color: #000;
+    background-color: #602B8A;
+    display: block;
+    color: white;
+    text-align: center;
+}
+
+.container h1 {
+    font-family: "lovelo";
+}
+.container h1 a {
+    text-decoration: none;
+    color: black;
 }
