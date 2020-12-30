@@ -1,9 +1,11 @@
 import time
 import urllib
 import query_lib
+from diskcache import Cache
 from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
+cache = Cache('search-tmp')
 
 @app.route('/')
 def index():
@@ -21,6 +23,7 @@ def search():
     avg_item_price = statistics.get("avg")
     avg_item_revenue = statistics.get("net")
     breakeven_price = '{:,.2f}'.format(round((float(cost) / 0.8), 2)) if cost else None
+    log_search(link_to_results)
     return render_template(
         "search.html",
         items = items,
@@ -35,3 +38,9 @@ def search():
         breakeven_price = breakeven_price,
         pages = pages
     )
+
+def log_search(url):
+    from datetime import datetime
+    curr_time = datetime.utcnow()
+    with Cache(cache.directory) as reference:
+        reference.set(curr_time, url, expire=2592000)
