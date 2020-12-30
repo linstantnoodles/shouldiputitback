@@ -16,6 +16,7 @@
       <a href="/">Closet Witch</a>
   </header>
   <div id="top" class="container">
+    <div id="loader" class="loading hide">Loading&#8230;</div>
     <div class="row">
       <div style="margin-top: 5%">
         <h1><a href="/">🔮 Comp Crystal Ball 🔮</a></h1>
@@ -105,7 +106,10 @@
       });
       let filterInputGroup = document.getElementById("filter-input-group");
       filterInputGroup.addEventListener("change", (e) => {
-          formElement.submit();
+          document.getElementById("loader").classList.remove("hide");
+          setTimeout(() => {
+            formElement.submit();
+          }, 700);
       });
   </script>
 </body>
