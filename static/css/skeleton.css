@@ -40,7 +40,6 @@
 .container {
   position: relative;
   width: 100%;
-  max-width: 960px;
   margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box; }
@@ -448,7 +447,8 @@ there.
 }
 
 .item {
-    width: 50%
+    position: relative;
+    width: 50%;
 }
 
 @media (min-width: 550px) {
@@ -561,6 +561,22 @@ header a {
 
 .hide {
     display: none;
+}
+
+.new-with-tag {
+    position: absolute;
+    top: 1rem;
+    right: 0px;
+    height: 35px;
+    width: 35px;
+}
+
+/* For devices larger than 550px */
+@media (min-width: 550px) {
+    .new-with-tag {
+        height: 45px;
+        width: 45px;
+    }
 }
 
 /* Add Spinner */
