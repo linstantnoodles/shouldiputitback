@@ -1,28 +1,4 @@
-import time
-import urllib
-import query_lib
-from diskcache import Cache
-from flask import Flask, request, jsonify, render_template, flash, redirect, url_for
-from flask_mongoengine import MongoEngine
-from flask_login import LoginManager, current_user, login_user
-from forms import LoginForm
-
-app = Flask(__name__)
-login = LoginManager(app)
-
-from models import User
-
-app.config['MONGODB_SETTINGS'] = {
-    'db': 'closetwitch',
-    'host': '127.0.0.1',
-    'port': 27017
-}
-
-# FIXME: replace with env value soon
-app.config['SECRET_KEY'] = 'you-will-never-guess'
-db = MongoEngine(app)
-
-cache = Cache('search-tmp')
+from src import app
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
