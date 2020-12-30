@@ -29,18 +29,10 @@
                 </div>
                 <div id="filter-input-group" class="flex flex-row">
                     <label for="sold">Sold
-                        {% if filter == "sold" %}
                             <input type="radio" id="sold" name="filter" value="sold" checked="checked">
-                        {% else %}
-                            <input type="radio" id="sold" name="filter" value="sold">
-                        {% endif %}
                     </label>
                     <label for="available">Available
-                        {% if filter == "available" %}
-                            <input type="radio" id="available" name="filter" value="available" checked="checked">
-                        {% else %}
                             <input type="radio" id="available" name="filter" value="available">
-                        {% endif %}
                     </label>
                 </div>
                 <div class="flex flex-row justify-start">
