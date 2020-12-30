@@ -45,7 +45,7 @@
                 </div>
                 <div class="flex flex-row justify-start">
                     <button id="search-button" type="submit" class="button button-primary">Search</button>
-                    <button id="reset-search">Clear</button>
+                    <button id="reset-search">Reset</button>
                 </div>
             </div>
             <input name="cost" type="hidden" value="{{ cost }}">
@@ -101,6 +101,7 @@
           e.preventDefault();
           searchField.value = "";
           searchField.focus();
+          document.getElementById("sold").checked = true;
       });
       let filterInputGroup = document.getElementById("filter-input-group");
       filterInputGroup.addEventListener("change", (e) => {
