@@ -96,10 +96,15 @@
   <script type="text/javascript">
       let resetSearchButton = document.getElementById("reset-search");
       let searchField = document.getElementById("search");
+      let formElement = document.getElementsByTagName("form")[0];
       resetSearchButton.addEventListener("click", function(e) {
           e.preventDefault();
           searchField.value = "";
           searchField.focus();
+      });
+      let filterInputGroup = document.getElementById("filter-input-group");
+      filterInputGroup.addEventListener("change", (e) => {
+          formElement.submit();
       });
   </script>
 </body>
