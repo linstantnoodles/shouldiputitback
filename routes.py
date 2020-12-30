@@ -1,28 +1,4 @@
-import time
-import urllib
-import query_lib
-from diskcache import Cache
-from flask import Flask, request, jsonify, render_template, flash, redirect, url_for
-from flask_mongoengine import MongoEngine
-from flask_login import LoginManager, current_user, login_user
-from forms import LoginForm
-
-app = Flask(__name__)
-login = LoginManager(app)
-
-from models import User
-
-app.config['MONGODB_SETTINGS'] = {
-    'db': 'closetwitch',
-    'host': '127.0.0.1',
-    'port': 27017
-}
-
-# FIXME: replace with env value soon
-app.config['SECRET_KEY'] = 'you-will-never-guess'
-db = MongoEngine(app)
-
-cache = Cache('search-tmp')
+from src import app
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -44,31 +20,31 @@ def index():
 
 @app.route('/search')
 def search():
-    query, market, filter = request.args['query'], request.args.get('market', "Women"), request.args.get('filter', 'sold')
+    query, cost, pages, filter = request.args['query'], request.args.get('cost', None), request.args.get('pages', 1), request.args.get('filter', 'sold')
     query_encoded = urllib.parse.quote(query)
-    items = query_lib.get_items(query_encoded, market=market, filter=filter)
-    link_to_results = query_lib.get_search_url(query_encoded, market=market, filter=filter)
+    items = query_lib.get_items(query_encoded, num_pages=int(pages), filter=filter)
+    link_to_results = query_lib.get_search_url(query_encoded, filter=filter)
     statistics = query_lib.analytics(items)
     num_items = len(items)
+    selling_fee_amt = statistics.get("fee")
     avg_item_price = statistics.get("avg")
+    avg_item_revenue = statistics.get("net")
+    breakeven_price = '{:,.2f}'.format(round((float(cost) / 0.8), 2)) if cost else None
     log_search(link_to_results)
     return render_template(
         "search.html",
         items = items,
         query = query,
         filter = filter,
-        market = market,
         link_to_results = link_to_results,
+        cost = cost,
         num_items = num_items,
-        avg_item_price = avg_item_price
+        selling_fee_amt = selling_fee_amt,
+        avg_item_price = avg_item_price,
+        avg_item_revenue = avg_item_revenue,
+        breakeven_price = breakeven_price,
+        pages = pages
     )
-
-@app.route('/inventory')
-def inventory():
-    import json
-    with open("items.json", "r") as f:
-        items = json.loads(f.read())
-        return render_template("inventory.html", items=items)
 
 def log_search(url):
     from datetime import datetime
