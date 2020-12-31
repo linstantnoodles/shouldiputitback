@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Home - Should I put it back?</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+  <header>
+      <a href="/">Closet Witch</a>
+  </header>
+  <div class="container">
+      <table class="u-full-width">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Market</th>
+              <th>Category</th>
+              <th>Sub-Category</th>
+              <th>Quantity</th>
+              <th>Size</th>
+              <th>NWT</th>
+              <th>Brand</th>
+              <th>Colors</th>
+              <th>Original Price</th>
+              <th>Availability</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+                <tr>
+                  <td>{{ item["title"] }}</td>
+                  <td><pre>{{ item["description"] }}</pre></td>
+                  <td>{{ item["market"] }}</td>
+                  <td>{{ item["category"] }}</td>
+                  <td>{{ item["subcategory"] }}</td>
+                  <td>{{ item["quantity"] }}</td>
+                  <td>{{ item["size"] }}</td>
+                  <td>{{ item["new_with_tags"] }}</td>
+                  <td>{{ item["brand"] }}</td>
+                  <td>{{ item["colors"] }}</td>
+                  <td>{{ item["original_price"] }}</td>
+                  <td>{{ item["availability"] }}</td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+  </div>
+</body>
+</html>

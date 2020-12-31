@@ -39,6 +39,13 @@ def search():
         pages = pages
     )
 
+@app.route('/inventory')
+def inventory():
+    import json
+    with open("items.json", "r") as f:
+        items = json.loads(f.read())
+        return render_template("inventory.html", items=items)
+
 def log_search(url):
     from datetime import datetime
     curr_time = datetime.utcnow()
