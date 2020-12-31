@@ -19,6 +19,7 @@
       <table class="u-full-width">
           <thead>
             <tr>
+              <th>Number</th>
               <th>Title</th>
               <th>Description</th>
               <th>Market</th>
@@ -36,6 +37,7 @@
           <tbody>
             {% for item in items %}
                 <tr>
+                  <td>{{ loop.index }}</td>
                   <td>{{ item["title"] }}</td>
                   <td><pre>{{ item["description"] }}</pre></td>
                   <td>{{ item["market"] }}</td>
