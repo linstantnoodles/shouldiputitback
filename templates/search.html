@@ -84,7 +84,7 @@
                         {% endif %}
                         <img src="{{ item.image_url }}"/>
                         <a class="title" href="{{ item.url }}" target="_blank">{{ item.title }}</a>
-                        <span class="price"><strong>${{ item.price }}</strong>
+                        <span class="price"><strong>${{ item.price }}</strong></span>
                             <span class="size">{{ item.size }}</span>
                         </span>
                     </div>
@@ -113,8 +113,9 @@
       filterInputGroup.addEventListener("change", (e) => {
           document.getElementById("loader").classList.remove("hide");
           setTimeout(() => {
+            document.getElementById("loader").classList.add("hide");
             formElement.submit();
-          }, 700);
+          }, 400);
       });
   </script>
 </body>

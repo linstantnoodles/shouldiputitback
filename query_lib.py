@@ -14,7 +14,7 @@ def get_items(query, num_pages=1, filter="sold"):
     for i in range(1, num_pages+1):
         paginated_url = f"{search_url}&max_id={i}"
         items.extend(query_items_from_source(paginated_url, query))
-    return sorted(items, key=lambda x: int(x["price"]), reverse=True)
+    return items
 
 def get_search_url(query, filter="sold"):
     base_url = f"https://poshmark.com/search?query={query}"
@@ -52,7 +52,7 @@ def query_items_from_source(full_url, query, limit=None):
         }
         results.append(res)
     with Cache(cache.directory) as reference:
-        reference.set(full_url, json.dumps(results), expire=3600*24)
+        reference.set(full_url, json.dumps(results), expire=3600)
     return results
 
 def analytics(data):
