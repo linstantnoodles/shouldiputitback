@@ -5,6 +5,7 @@ import json
 from bs4 import BeautifulSoup 
 import argparse
 from diskcache import Cache
+import re
 
 cache = Cache('tmp')
 
@@ -34,11 +35,15 @@ def query_items_from_source(full_url, query, limit=None):
     cards = data_soup.find_all("div", class_="card card--small")
     results = []
     limit = limit or len(cards)
+    prog = re.compile(r"(\d{4}/\d{2}/\d{2})")
     for card in cards[:limit]:
         item_path = card.find("a", class_="tile__covershot")['href']
         title = card.find("a", class_="tile__title tc--b").text.strip()
         new_with_tag = True if card.find("span", class_="condition-tag") else False
+        like_el = card.find("div", class_="social-action-bar__like").find("span")
+        likes = like_el.text if like_el else 0
         image_url = card.find("div", class_="img__container").find("img")["data-src"]
+        list_date = prog.search(image_url).group(1)
         price = card.find("div", class_="item__details").find("span", class_="fw--bold").text.replace("$","").replace(",","").strip()
         size_element = card.find("a", class_="tile__details__pipe__size") or card.find("div", class_="tile__details__pipe__size")
         size = size_element.text.strip()
@@ -46,8 +51,10 @@ def query_items_from_source(full_url, query, limit=None):
             "title": title,
             "url": f"https://poshmark.com{item_path}",
             "image_url": image_url,
+            "likes": likes,
             "price": price,
             "new_with_tag": new_with_tag,
+            "list_date": list_date,
             "size": size
         }
         results.append(res)

@@ -523,6 +523,12 @@ body {
     margin-right: 1rem;
 }
 
+.item .size, .item .likes {
+    background-color: #ccc;
+    padding: 3px;
+    margin-right: 5px;
+}
+
 /*
  * Back to top button
  * Source: https://moderncss.dev/pure-css-smooth-scroll-back-to-top
