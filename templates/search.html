@@ -77,9 +77,7 @@
                 </div>
             {% else %}
                 <div>
-                    <ul>
-                        <li><strong>${{ avg_item_price }}</strong> is the average list price based on {{ num_items }} items.</li>
-                    </ul>
+                    <p><strong>${{ avg_item_price }}</strong> is the average list price based on {{ num_items }} items.</p>
                 </div>
             {% endif %}
             <div class="flex flex-wrap">
@@ -113,6 +111,7 @@
       let resetSearchButton = document.getElementById("reset-search");
       let searchField = document.getElementById("search");
       let formElement = document.getElementsByTagName("form")[0];
+      let loaderElement = document.getElementById("loader");
       resetSearchButton.addEventListener("click", function(e) {
           e.preventDefault();
           searchField.value = "";
@@ -121,12 +120,14 @@
       });
       let filterInputGroup = document.getElementById("filter-input-group");
       filterInputGroup.addEventListener("change", (e) => {
-          document.getElementById("loader").classList.remove("hide");
+          loaderElement.classList.remove("hide");
           setTimeout(() => {
-            document.getElementById("loader").classList.add("hide");
             formElement.submit();
-          }, 400);
+          }, 300);
       });
+      window.onbeforeunload = () => {
+        loaderElement.classList.add("hide");
+      };
   </script>
 </body>
 </html>
