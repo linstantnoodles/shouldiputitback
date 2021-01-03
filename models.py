@@ -1,6 +1,28 @@
 from mongoengine import StringField, BooleanField, IntField, Document, DynamicDocument, FloatField
-from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+
+def eval_filter(filter_exp, scope=None):
+    def format_value(x):
+        if isinstance(x, str):
+            return f"'{x}'"
+        if isinstance(x, bool):
+            return {True: "true", False: "false"}[x]
+        return x
+    def format_field_name(x):
+        if scope:
+            return f"{scope}.{x}"
+        return x
+    if isinstance(filter_exp, Filter):
+        field_name = format_field_name(filter_exp.field)
+        value = format_value(filter_exp.value)
+        if filter_exp.operator == "=":
+            return f"({field_name} === {value})"
+        if filter_exp.operator == "!=":
+            return f"({field_name} !== {value})"
+    if isinstance(filter_exp, FilterList):
+        if filter_exp.operator == "AND":
+            x = " && ".join([eval_filter(x) for x in filter_exp.filters])
+            return f"({x})"
 
 # In memory objects
 class Business:
@@ -17,6 +39,17 @@ class Field:
     def __init__(self, name, type):
         self.name = name
         self.type = type
+
+class FilterList:
+    def __init__(self, operator, filters):
+        self.operator = operator
+        self.filters = filters 
+
+class Filter:
+    def __init__(self, field, operator, value):
+        self.field = field
+        self.operator = operator
+        self.value = value
 
 class Item:
     def __init__(self):
@@ -36,6 +69,12 @@ class Form:
              Question(label="Size", type="text", field="size"),
              Question(label="Style #", type="text", field="style_number"),
              Question(label="RN #", type="text", field="rn_number"),
+             Question(
+                 label="Inseam Length",
+                 type="integer",
+                 field="inseam_length",
+                 visibility_filter=Filter("category", "=", "jeans")
+             ),
              Question(label="Fabric", type="text", field="fabric"),
              Question(label="Care Instructions", type="text", field="care_instructions"),
              Question(label="Quantity", type="integer", field="quantity"),
@@ -46,11 +85,12 @@ class Form:
         ]
 
 class Question:
-    def __init__(self, label=None, type=None, field=None, required=False, rank=None):
+    def __init__(self, label=None, type=None, field=None, required=False, rank=None, visibility_filter=None):
         self.label = label
         self.type = type
         self.field = field
         self.required = required
+        self.visibility_filter = visibility_filter
         self.rank = rank
 
 class BusinessRepository:

@@ -23,9 +23,6 @@
               <a class="nav-link active" aria-current="page" href="#">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Features</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="#">Pricing</a>
             </li>
           </ul>
@@ -36,26 +33,24 @@
       </div>
     </nav>
       <div id="app" class="container">
-          <form>
+        <form action="{{ url_for('item') }}" method="POST">
           {% for question in form.questions %}
             {% if question.type == "text" %}
-                <div class="mb-3">
+                <div v-if="{{ visible_condition(question.visibility_filter) }}" class="mb-3">
                     <label for="{{ question.field }}" class="form-label"> {{ question.label }}</label>
-                    [[ {{ question.field }} ]]
                     <input v-model="{{ question.field }}" placeholder="edit me" type="text" name="{{ question.field }}" class="form-control"></input>
                 </div>
             {% endif %}
             {% if question.type == "integer" %}
-                <div class="mb-3">
-                    [[ {{ question.field }} ]]
+                <div v-if="{{ visible_condition(question.visibility_filter) }}" class="mb-3">
                     <label for="{{ question.field }}" class="form-label"> {{ question.label }}</label>
                     <input v-model="{{ question.field }}" type="number" name="{{ question.field }}" class="form-control"></input>
                 </div>
             {% endif %}
           {% endfor %}
+            <button type="submit" class="button button-primary">Search</button>
           </form>
       </div>
-  /* https://stackoverflow.com/questions/45398114/vue-submit-button-data */
   <script type="text/javascript">   
       var app = new Vue({
       el: '#app',

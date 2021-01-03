@@ -2,10 +2,10 @@ import time
 import urllib
 import query_lib
 from diskcache import Cache
-from flask import Flask, request, jsonify, render_template, flash, redirect, url_for
+from flask import Flask, request, jsonify, render_template, flash, redirect, url_for, make_response
 from flask_mongoengine import MongoEngine
 from flask_login import LoginManager, current_user, login_user
-from models import BusinessRepository, FormRepository
+from models import BusinessRepository, FormRepository, eval_filter
 
 app = Flask(__name__)
 
@@ -31,8 +31,17 @@ def new_item():
     business = business_repo.find_by_id(1)
     item_form = form_repo.find_by_type(1, "form")
     field_data = { question.field:"" for question in item_form.questions }
-    print(field_data)
-    return render_template("item.html", form=item_form, field_data=field_data)
+    def visible_condition(filters=None):
+        if not filters:
+            return "true"
+        return eval_filter(filters) 
+    return render_template("item.html", form=item_form, field_data=field_data, visible_condition=visible_condition)
+
+@app.route('/items/create', methods=["POST"])
+def item():
+    print(request.form)
+    data = {'message': 'Created', 'code': 'SUCCESS'}
+    return make_response(jsonify(data), 201)
 
 @app.route('/')
 def index():
