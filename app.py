@@ -5,10 +5,9 @@ from diskcache import Cache
 from flask import Flask, request, jsonify, render_template, flash, redirect, url_for
 from flask_mongoengine import MongoEngine
 from flask_login import LoginManager, current_user, login_user
-from forms import LoginForm
+from models import BusinessRepository, FormRepository
 
 app = Flask(__name__)
-login = LoginManager(app)
 
 from models import User
 
@@ -24,19 +23,16 @@ db = MongoEngine(app)
 
 cache = Cache('search-tmp')
 
-@app.route('/login', methods=["GET", "POST"])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.objects(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash("Invalid username or password")
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        return redirect('/index')
-    return render_template('login.html', title='Sign In', form=form)
+@app.route('/items/new', methods=["GET"])
+def new_item():
+    business_repo = BusinessRepository()
+    form_repo = FormRepository()
+    business_repo.create("prog")
+    business = business_repo.find_by_id(1)
+    item_form = form_repo.find_by_type(1, "form")
+    field_data = { question.field:"" for question in item_form.questions }
+    print(field_data)
+    return render_template("item.html", form=item_form, field_data=field_data)
 
 @app.route('/')
 def index():
