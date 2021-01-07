@@ -1,28 +1,45 @@
+import os
 import time
 import urllib
 import query_lib
 from diskcache import Cache
 from flask import Flask, request, jsonify, render_template, flash, redirect, url_for
 from flask_mongoengine import MongoEngine
-from flask_login import LoginManager, current_user, login_user
-from forms import LoginForm
+from flask_login import LoginManager, current_user, login_user, logout_user
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 login = LoginManager(app)
 
-from models import User
-
 app.config['MONGODB_SETTINGS'] = {
-    'db': 'closetwitch',
-    'host': '127.0.0.1',
-    'port': 27017
+    'db': os.getenv("DB_NAME", "closetwitch"),
+    'host': os.getenv("DB_HOST", "127.0.0.1"),
+    'port': os.getenv("DB_PORT", 27017),
+    'username': os.getenv("DB_USERNAME", ""),
+    'password': os.getenv("DB_PASSWORD", "")
 }
 
-# FIXME: replace with env value soon
-app.config['SECRET_KEY'] = 'you-will-never-guess'
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 db = MongoEngine(app)
 
 cache = Cache('search-tmp')
+
+from models import User
+from forms import LoginForm, SignupForm
+
+@app.route('/signup', methods=["GET", "POST"])
+def signup(): 
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = SignupForm()
+    if form.validate_on_submit():
+        user = User(email=form.email.data)
+        user.set_password(form.password.data)
+        user.save()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for("login"))
+    return render_template('signup.html', title='Sign up', form=form)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -30,13 +47,18 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.objects(username=form.username.data).first()
+        user = User.objects(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash("Invalid username or password")
+            flash("Invalid email or password")
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect('/index')
+        return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 @app.route('/')
 def index():
