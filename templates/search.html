@@ -12,8 +12,18 @@
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
 </head>
 <body>
-  <header>
-      <a href="/">Closet Witch</a>
+    <header>
+      <div class="logo">
+        <a href="/">Closet Witch</a>
+      </div>
+      <div class="nav">
+        {% if current_user.is_anonymous %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('signup') }}">Signup</a>
+        {% else %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+      </div>
   </header>
   <div id="top" class="container">
     <div id="loader" class="loading hide">Loading&#8230;</div>

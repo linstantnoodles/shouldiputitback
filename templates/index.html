@@ -13,12 +13,17 @@
 </head>
 <body>
   <header>
-      <a href="/">Closet Witch</a>
-    {% if current_user.is_anonymous %}
-    <a href="{{ url_for('login') }}">Login</a>
-    {% else %}
-    <a href="{{ url_for('logout') }}">Logout</a>
-    {% endif %}
+      <div class="logo">
+        <a href="/">Closet Witch</a>
+      </div>
+      <div class="nav">
+        {% if current_user.is_anonymous %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('signup') }}">Signup</a>
+        {% else %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+      </div>
   </header>
   <div class="container">
     <div class="row">

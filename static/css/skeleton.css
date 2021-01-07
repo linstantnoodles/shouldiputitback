@@ -566,7 +566,7 @@ body {
   pointer-events: none;
 }
 
-header a {
+header .logo a {
     font-family: "sparkly";
     font-size: 5rem;
     text-decoration: none;
@@ -575,6 +575,18 @@ header a {
     display: block;
     color: white;
     text-align: center;
+}
+
+header .nav {
+    display: flex;
+    justify-content: flex-end;
+    box-shadow: 2px 3px;
+}
+
+header .nav a {
+    margin-right: 20px;
+    padding: 5px;
+    text-decoration: none;
 }
 
 .container h1 {
