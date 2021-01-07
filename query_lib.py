@@ -9,20 +9,20 @@ import re
 
 cache = Cache('tmp')
 
-def get_items(query, num_pages=1, filter="sold"):
-    search_url = get_search_url(query, filter=filter)
+def get_items(query, num_pages=1, filter="sold", market="Women"):
+    search_url = get_search_url(query, market=market, filter=filter)
     items = []
     for i in range(1, num_pages+1):
         paginated_url = f"{search_url}&max_id={i}"
         items.extend(query_items_from_source(paginated_url, query))
     return items
 
-def get_search_url(query, filter="sold"):
+def get_search_url(query, market="Women", filter="sold"):
     base_url = f"https://poshmark.com/search?query={query}"
     if filter == "available":
-        params = "&department=Women&sort_by=best_match&all_size=true&my_size=false"
+        params = f"&department={market}&sort_by=best_match&all_size=true&my_size=false"
     else:
-        params = "&department=Women&availability=sold_out&sort_by=best_match&all_size=true&my_size=false"
+        params = f"&department={market}&availability=sold_out&sort_by=best_match&all_size=true&my_size=false"
     return f"{base_url}{params}"
 
 def query_items_from_source(full_url, query, limit=None): 

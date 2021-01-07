@@ -31,14 +31,14 @@
                       <label for="search">Search</label>
                       <input name="query" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="true" class="u-full-width" type="search" id="search" autofocus required>
                   </div>
-                  
                   <div class="three columns">
-                      <label for="cost">Item Cost (Optional)</label>
-                      <input class="u-full-width" name="cost" type="number" id="cost" min="0" max="10000" step="0.01" value="{{ cost }}">
-                  </div>
-                  <div class="three columns">
-                      <label for="pages">Pages</label>
-                      <input class="u-full-width" name="pages" type="number" id="pages" min="1" max="5" value="1">
+                      <label for="market">Market</label>
+                      <select class="u-full-width" name="market" id="market">
+                        <option selected>Women</option>
+                        <option>Men</option>
+                        <option>Kids</option>
+                        <option>All</option>
+                      </select>
                   </div>
               </div>
                 <div id="filter-input-group" class="row flex flex-row">

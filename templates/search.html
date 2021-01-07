@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="filter-tags">
-                    <span class="filter-tag">Womens</span>
+                    <span class="filter-tag">{{ market }}</span>
                     <span class="filter-tag">Just Shared</span>
                 </div>
                 <div id="filter-input-group" class="flex flex-row">
@@ -59,8 +59,6 @@
                     <button id="reset-search">Reset</button>
                 </div>
             </div>
-            <input name="cost" type="hidden" value="{{ cost }}">
-            <input class="u-full-width" name="pages" type="hidden" value="{{ pages }}">
             <a href="{{ link_to_results }}" target="_blank">Link to search results on Poshmark.com</a>
         </form>
         {% if items %}
@@ -68,12 +66,6 @@
                 <div>
                     <p>
                     <strong>${{ avg_item_price }}</strong> is the average sold price based on {{ num_items }} items.</p>
-                    {% if cost %}
-                    <p>
-                        <strong>${{ breakeven_price }}</strong> is the break even selling price based on your item cost of ${{ cost }}.
-
-                    </p>
-                        {% endif %}
                 </div>
             {% else %}
                 <div>
