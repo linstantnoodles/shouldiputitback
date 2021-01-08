@@ -1,72 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Home - Should I put it back?</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
-</head>
-<body>
-  <header>
-      <div class="logo">
-        <a href="/">Closet Witch</a>
-      </div>
-      <div class="nav">
-        {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('signup') }}">Signup</a>
-        {% else %}
-            <a href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
-      </div>
-  </header>
-  <div class="container">
-    <div class="row">
-      <div class="" style="margin-top: 5%">
-        <h1>
-              <img class="crystal-ball" src="{{ url_for('static', filename='images/crystal-ball.png') }}"/>
-              <a href="/">Comp Crystal Ball</a>
-              <img class="crystal-ball" src="{{ url_for('static', filename='images/crystal-ball.png') }}"/>
-        </h1>
-        <p>Check sold stats on Poshmark and learn your item's fortune.</p>
-        <div>
-            <form action="{{ url_for('search') }}" method="GET">
-              <div class="row">
-                  <div class="six columns">
-                      <label for="search">Search</label>
-                      <input name="query" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="true" class="u-full-width" type="search" id="search" autofocus required>
-                  </div>
-                  <div class="three columns">
-                      <label for="market">Market</label>
-                      <select class="u-full-width" name="market" id="market">
-                        <option selected>Women</option>
-                        <option>Men</option>
-                        <option>Kids</option>
-                        <option>All</option>
-                      </select>
-                  </div>
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="" style="margin-top: 5%">
+    <h1>
+          <img class="crystal-ball" src="{{ url_for('static', filename='images/crystal-ball.png') }}"/>
+          <a href="/">Comp Crystal Ball</a>
+          <img class="crystal-ball" src="{{ url_for('static', filename='images/crystal-ball.png') }}"/>
+    </h1>
+    <p>Check sold stats on Poshmark and learn your item's fortune.</p>
+    <div>
+        <form action="{{ url_for('search') }}" method="GET">
+          <div class="row">
+              <div class="six columns">
+                  <label for="search">Search</label>
+                  <input name="query" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="true" class="u-full-width" type="search" id="search" autofocus required>
               </div>
-                <div id="filter-input-group" class="row flex flex-row">
-                    <label for="sold">Sold
-                        <input type="radio" id="sold" name="filter" value="sold" checked="checked">
-                    </label>
-                    <label for="available">Available
-                        <input type="radio" id="available" name="filter" value="available">
-                    </label>
-                </div>
+              <div class="three columns">
+                  <label for="market">Market</label>
+                  <select class="u-full-width" name="market" id="market">
+                    <option selected>Women</option>
+                    <option>Men</option>
+                    <option>Kids</option>
+                    <option>All</option>
+                  </select>
+              </div>
+          </div>
+            <div id="filter-input-group" class="row flex flex-row">
+                <label for="sold">Sold
+                    <input type="radio" id="sold" name="filter" value="sold" checked="checked">
+                </label>
+                <label for="available">Available
+                    <input type="radio" id="available" name="filter" value="available">
+                </label>
+            </div>
 
-              <button type="submit" class="button button-primary">Search</button>
-              <button id="reset-search">Reset</button>
-            </form>
-        </div>
-      </div>
+          <button type="submit" class="button button-primary">Search</button>
+          <button id="reset-search">Reset</button>
+        </form>
     </div>
   </div>
+</div>
+{% endblock %}
+{% block scripts %}
     <script type="text/javascript">
       let resetSearchButton = document.getElementById("reset-search");
       let searchField = document.getElementById("search");
@@ -76,5 +52,4 @@
           searchField.focus();
       });
   </script>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock %} - ClosetWitch</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+    <header>
+      <div class="logo">
+        <a href="/">Closet Witch</a>
+      </div>
+      <div class="nav">
+        {% if current_user.is_anonymous %}
+            <a href="{{ url_for('login') }}">Sign in</a>
+            <a href="{{ url_for('signup') }}">Sign up</a>
+        {% else %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+      </div>
+  </header>
+  <div id="top" class="container">
+    {% block content %}{% endblock %}
+  </div>
+  <div id="footer">
+    {% block footer %}
+        &copy; Copyright 2020 by <a href="https://www.closetwitch.com">ClosetWitch</a>.
+    {% endblock %}
+  </div>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

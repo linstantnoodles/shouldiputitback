@@ -1,60 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Home - Should I put it back?</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
-</head>
-<body>
-  <header>
-      <a href="/">Closet Witch</a>
-  </header>
-  <div class="container">
-    <div class="row">
-      <div class="" style="margin-top: 5%">
-          <h1>Register</h1>
-           <form action="" method="post">
-                {{ form.hidden_tag() }}
-                <p>
-                    {{ form.email.label }}<br>
-                    {{ form.email(size=64) }}<br>
-                    {% for error in form.email.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ form.password.label }}<br>
-                    {{ form.password(size=32) }}<br>
-                    {% for error in form.password.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ form.password2.label }}<br>
-                    {{ form.password2(size=32) }}<br>
-                    {% for error in form.password2.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-                </p>
-                <p>{{ form.submit() }}</p>
-            </form>
-        </div>
+{% extends "base.html" %}
+{% block title %}Signup{% endblock %}
+{% block content %} 
+<div class="row">
+  <div style="margin-top: 5%">
+      <h1>Sign up</h1>
+      <form action="{{ url_for("signup") }}" method="POST">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.email.label }}<br>
+                {{ form.email(size=64) }}<br>
+                {% for error in form.email.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.password.label }}<br>
+                {{ form.password(size=32) }}<br>
+                {% for error in form.password.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.password2.label }}<br>
+                {{ form.password2(size=32) }}<br>
+                {% for error in form.password2.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
     </div>
-  </div>
-    <script type="text/javascript">
-      let resetSearchButton = document.getElementById("reset-search");
-      let searchField = document.getElementById("search");
-      resetSearchButton.addEventListener("click", function(e) {
-          e.preventDefault();
-          searchField.value = "";
-          searchField.focus();
-      });
-  </script>
-</body>
-</html>
+</div>
+{% endblock %}
