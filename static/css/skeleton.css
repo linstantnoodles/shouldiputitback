@@ -500,14 +500,47 @@ div#top {
     margin-bottom: 2rem;
 }
 
-
-
-.item > img {
+.img-box > img {
     display: block;
     width: 100%;
 }
 
-.item .title, .item .price, .item {
+.img-box {
+    position: relative;
+}
+
+.sold-tag {
+    text-transform: uppercase;
+    font-style: normal;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+}
+
+.tile__inventory-tag {
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -ms-flex-pack: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    -webkit-box-align: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #BD0015;
+}
+
+i.icon.sold-tag {
+    width: 76px;
+    height: 26px;
+}
+
+.item .title, .item {
     display: block;
 }
 
@@ -646,7 +679,7 @@ header .nav a {
 
 .new-with-tag {
     position: absolute;
-    top: 1rem;
+    top: 0.5rem;
     right: 0px;
     height: 35px;
     width: 35px;
