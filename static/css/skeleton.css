@@ -427,6 +427,35 @@ there.
 
 /* Custom */
 
+#main {
+    min-height: 500px;
+    height: 100vh;
+}
+
+#footer {
+    display: flex;
+    justify-content: center;
+}
+#top .centered {
+   display: flex;
+   justify-content: center; 
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+ul.flashes {
+    list-style: none;
+}
+
+ul.flashes li {
+    color: red;
+    font-weight: bold;
+
+}
+
 .flex {
     display: flex;
 }
@@ -444,6 +473,15 @@ there.
 }
 .justify-between {
     justify-content: space-between;
+}
+
+div#top {
+    flex: 1 1 auto;
+}
+
+.question-group {
+    display: flex;
+    flex-direction: column;
 }
 
 .item {

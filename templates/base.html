@@ -12,26 +12,30 @@
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
 </head>
 <body>
-    <header>
-      <div class="logo">
-        <a href="/">Closet Witch</a>
+    <div id="main" class="flex flex-col">
+        <header>
+          <div class="logo">
+            <a href="/">Closet Witch</a>
+          </div>
+          <div class="nav">
+            {% if current_user.is_anonymous %}
+                <a href="{{ url_for('login') }}">Sign in</a>
+                <a href="{{ url_for('signup') }}">Sign up</a>
+            {% else %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+          </div>
+      </header>
+      <div id="top" class="container">
+        {% block content %}{% endblock %}
       </div>
-      <div class="nav">
-        {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Sign in</a>
-            <a href="{{ url_for('signup') }}">Sign up</a>
-        {% else %}
-            <a href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
+      <div id="footer">
+        {% block footer %}
+            <div>
+                <span>&copy; Copyright 2020 by </span><a href="https://www.closetwitch.com">ClosetWitch</a>.
+            </div>
+        {% endblock %}
       </div>
-  </header>
-  <div id="top" class="container">
-    {% block content %}{% endblock %}
-  </div>
-  <div id="footer">
-    {% block footer %}
-        &copy; Copyright 2020 by <a href="https://www.closetwitch.com">ClosetWitch</a>.
-    {% endblock %}
   </div>
   {% block scripts %}{% endblock %}
 </body>
