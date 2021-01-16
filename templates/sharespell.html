@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}ShareSpell{% endblock %}
+{% block content %} 
+    <div id="sharespell">
+        <div class="hero"> 
+            <div class="intro">
+                <h1>Share your poshmark closet automatically</h1>
+                <p>
+                    ShareSpell is the simplest, most fun, and reliable way to share your closet on poshmark.
+                </p>
+                <button>Install the chrome extension</button>
+            </div>
+        </div>
+            <img src="https://pixabay.com/get/53e4dd404b50a814f1dc8460da29317f1538dce7555278_640.jpg"/>
+    </div>
+        <div class="features">
+            <h2>Features</h2>
+            <div id="feature-one">
+                <ul>
+                    <li>Share your entire closet to boost sales</li>
+                    <li>Adjust your sharing speed to avoid reCAPTCHA</li>
+                    <li>reCAPTCHA audio alarm to let you know when sharing gets interrupted</li>
+                    <li>Recover from internet issues so your closet order doesn't get messed up</li>
+                </ul>
+                <div>
+                    <img src="{{ url_for('static', filename='images/ss1.png') }}" class="screenshot"/>
+                </div>
+            </div>
+            <div id="feature-two">
+                <h3>Pause and Change Speeds</h3>
+                <img src="{{ url_for('static', filename='images/speed-changes.png') }}"/>
+
+                    <p>We share in reverse to maintain your closet order and we only share available items. You can also share other peoples closets!</p>
+                <p>You can pause the closet loading or sharing process at anytime and resume. We support two sharing speeds: standard and turbo. Turbo is more likely to trigger a reCAPTCHA and interrupt the sharing process, but don't worry - just click resume after solving the captcha we ShareSpell will continue where it left off.</p>
+            </div>
+            <div id="feature-three">
+                <h3>Recover from internet connection issues</h3>
+                <img src="{{ url_for('static', filename='images/connection-interruption.png') }}"/>
+                <p>Lost internet during the sharing process? Just hit resume after your connection is backup and ShareSpell will pick up where it left off</p>
+            </div>
+        </div>
+        <div class="pricing">
+            <h2>Pricing</h2>
+            <p>Completely free to use for now. We're still in alpha and are working on rapidly improving and adding new features - all we ask is for your feedback on how we can make this tool better.
+        </div>
+        <div class="support">
+            <h2>Contact and Support</h2>
+            <p>Have questions? Having an issue? You can react our team at closetwitch@fastmail.com by email and expect a response within 12 hours.</p>
+        </div>
+{% endblock %}

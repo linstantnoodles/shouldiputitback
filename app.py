@@ -64,6 +64,10 @@ def logout():
 def index():
     return render_template("index.html")
 
+@app.route('/sharespell')
+def sharespell():
+    return render_template("sharespell.html")
+
 @app.route('/search')
 def search():
     query, market, filter = request.args['query'], request.args.get('market', "Women"), request.args.get('filter', 'sold')
