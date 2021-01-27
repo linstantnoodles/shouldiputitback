@@ -20,6 +20,7 @@ app.config['MONGODB_SETTINGS'] = {
     'password': os.getenv("DB_PASSWORD", "")
 }
 
+# For flask login
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 db = MongoEngine(app)
 
@@ -27,6 +28,12 @@ cache = Cache('search-tmp')
 
 from models import User
 from forms import LoginForm, SignupForm
+
+@app.after_request
+def set_secure_headers(response):
+    response.headers["Strict-Transport-Security"] = "max-age=63072000; includeSubDomains; preload"
+    response.headers["X-Frame-Options"] = 'SAMEORIGIN'
+    return response 
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup(): 
