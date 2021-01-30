@@ -42,7 +42,8 @@ def query_items_from_source(full_url, query, limit=None):
         new_with_tag = True if card.find("span", class_="condition-tag") else False
         like_el = card.find("div", class_="social-action-bar__like").find("span")
         likes = like_el.text if like_el else 0
-        image_url = card.find("div", class_="img__container").find("img")["data-src"]
+        img_el = card.find("div", class_="img__container").find("img")
+        image_url = img_el.get("src") or img_el.get("data-src")
         list_date = prog.search(image_url).group(1)
         price = card.find("div", class_="item__details").find("span", class_="fw--bold").text.replace("$","").replace(",","").strip()
         size_element = card.find("a", class_="tile__details__pipe__size") or card.find("div", class_="tile__details__pipe__size")
