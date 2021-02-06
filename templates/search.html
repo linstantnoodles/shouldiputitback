@@ -129,6 +129,9 @@
         loaderElement.classList.add("hide");
       };
       loadMoreButton.addEventListener("click", async (e) => {
+        e.target.disabled = true;
+        let originalText = e.target.textContent;
+        e.target.textContent = "Loading more ...";
         const formData = new FormData(document.querySelector('form'))
         let searchParams = {}
         for (var pair of formData.entries()) {
@@ -138,6 +141,8 @@
         const params = new URLSearchParams(searchParams);
         const searchUrl = "{{ url_for('search') }}" + "?" + params.toString();
         let response = await fetch(searchUrl);
+        e.target.disabled = false;
+        e.target.textContent = originalText;
         if (!response.ok) {
             console.log("error in request");
             return;
