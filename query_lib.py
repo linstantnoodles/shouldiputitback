@@ -17,6 +17,11 @@ def get_items(query, num_pages=1, filter="sold", market="Women"):
         items.extend(query_items_from_source(paginated_url, query))
     return items
 
+def get_items_by_page(query, page_number=1, filter="sold", market="Women"):
+    search_url = get_search_url(query, market=market, filter=filter)
+    paginated_url = f"{search_url}&max_id={page_number}"
+    return query_items_from_source(paginated_url, query)
+
 def get_search_url(query, market="Women", filter="sold"):
     base_url = f"https://poshmark.com/search?query={query}"
     if filter == "available":

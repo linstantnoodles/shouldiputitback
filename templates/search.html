@@ -58,7 +58,7 @@
                 <p><strong>${{ avg_item_price }}</strong> is the average list price based on {{ num_items }} items.</p>
             </div>
         {% endif %}
-        <div class="flex flex-wrap">
+        <div id="item-gallery" class="flex flex-wrap">
             {% for item in items %}
                 <div class="item">
                     <div class="img-box">
@@ -91,6 +91,7 @@
                 </div>
             {% endfor %}
         </div>
+        <div><button id="load-more-btn" class="button button-primary">Load more results</button></div>
         <div class="back-to-top-wrapper">
             <a href="#top" class="back-to-top-link" aria-label="Scroll to Top">🔝</a>
         </div>
@@ -102,6 +103,10 @@
 {% endblock %}
 {% block scripts %}
     <script type="text/javascript">
+      let loadMoreButton = document.getElementById("load-more-btn");
+      let itemGallery = document.getElementById("item-gallery");
+      let currentPage = 1;
+      let pageSize = 24;
       let resetSearchButton = document.getElementById("reset-search");
       let searchField = document.getElementById("search");
       let formElement = document.getElementsByTagName("form")[0];
@@ -123,5 +128,38 @@
       window.onbeforeunload = () => {
         loaderElement.classList.add("hide");
       };
+      loadMoreButton.addEventListener("click", async (e) => {
+        e.target.disabled = true;
+        let originalText = e.target.textContent;
+        e.target.textContent = "Loading more ...";
+        const formData = new FormData(document.querySelector('form'))
+        let searchParams = {}
+        for (var pair of formData.entries()) {
+          searchParams[pair[0]] = pair[1];
+        }
+        searchParams["page_number"] = currentPage + 1;
+        const params = new URLSearchParams(searchParams);
+        const searchUrl = "{{ url_for('search') }}" + "?" + params.toString();
+        let response = await fetch(searchUrl);
+        e.target.disabled = false;
+        e.target.textContent = originalText;
+        if (!response.ok) {
+            console.log("error in request");
+            return;
+        }
+        let text = await response.text();
+        const domparser = new DOMParser();
+        const doc = domparser.parseFromString(text, "text/html");
+        let items = doc.getElementsByClassName("item");
+        let documentFragment = document.createDocumentFragment();
+        for (let i = 0; i < items.length; i++) {
+          documentFragment.appendChild(items[i]);
+        }
+        itemGallery.appendChild(documentFragment);
+        if (items.length < pageSize) {
+            loadMoreButton.remove();
+        }
+        currentPage += 1;
+      });
   </script>
 {% endblock %}

@@ -77,9 +77,9 @@ def sharespell():
 
 @app.route('/search')
 def search():
-    query, market, filter = request.args['query'], request.args.get('market', "Women"), request.args.get('filter', 'sold')
+    query, market, filter, page_number = request.args['query'], request.args.get('market', "Women"), request.args.get('filter', 'sold'), request.args.get('page_number')
     query_encoded = urllib.parse.quote(query)
-    items = query_lib.get_items(query_encoded, market=market, filter=filter)
+    items = query_lib.get_items_by_page(query_encoded, page_number=page_number, market=market, filter=filter)
     link_to_results = query_lib.get_search_url(query_encoded, market=market, filter=filter)
     statistics = query_lib.analytics(items)
     num_items = len(items)
