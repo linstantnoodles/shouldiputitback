@@ -50,7 +50,9 @@ def query_items_from_source(full_url, query, limit=None):
         img_el = card.find("div", class_="img__container").find("img")
         image_url = img_el.get("src") or img_el.get("data-src")
         list_date = prog.search(image_url).group(1)
-        price = card.find("div", class_="item__details").find("span", class_="fw--bold").text.replace("$","").replace(",","").strip()
+        item_detail_el = card.find("div", class_="item__details")
+        price = item_detail_el.find("span", class_="fw--bold").text.replace("$","").replace(",","").strip()
+        original_price = item_detail_el.find("span", class_="td--lt").text.replace("$","").replace(",","").strip()
         size_element = card.find("a", class_="tile__details__pipe__size") or card.find("div", class_="tile__details__pipe__size")
         size = size_element.text.strip()
         res = {
@@ -59,6 +61,7 @@ def query_items_from_source(full_url, query, limit=None):
             "image_url": image_url,
             "likes": likes,
             "price": price,
+            "original_price": original_price,
             "new_with_tag": new_with_tag,
             "list_date": list_date,
             "size": size

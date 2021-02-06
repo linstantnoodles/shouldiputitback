@@ -489,6 +489,15 @@ div#top {
     width: 50%;
 }
 
+.heart {
+    color: #8A6CE5;
+}
+.original-price {
+    padding-left: 4px !important;
+    text-decoration: line-through !important;
+    color: #9b9691 !important;
+}
+
 @media (min-width: 550px) {
     .item {
         width: 24%;
@@ -595,7 +604,7 @@ body {
 }
 
 .item .size, .item .likes {
-    padding: 3px;
+    padding-right: 5px;
     margin-right: 5px;
 }
 
