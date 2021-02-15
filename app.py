@@ -69,13 +69,26 @@ def logout():
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("comp.html")
 
+@app.route('/share')
 @app.route('/sharespell')
 def sharespell():
     return render_template("sharespell.html")
 
-@app.route('/search')
+@app.route("/comp")
+def comp():
+    return render_template("comp.html")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+@app.route('/comp/search')
 def search():
     query, market, filter, page_number = request.args['query'], request.args.get('market', "Women"), request.args.get('filter', 'sold'), request.args.get('page_number')
     query_encoded = urllib.parse.quote(query)

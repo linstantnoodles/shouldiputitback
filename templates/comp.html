@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="" style="margin-top: 5%">
+    <h1>
+          <img class="crystal-ball" src="{{ url_for('static', filename='images/crystal-ball.png') }}"/>
+          <a href="/">Comp Crystal Ball</a>
+          <img class="crystal-ball" src="{{ url_for('static', filename='images/crystal-ball.png') }}"/>
+    </h1>
+    <p>Check sold stats on Poshmark and learn your item's fortune.</p>
+    <div>
+        <form action="{{ url_for('search') }}" method="GET">
+          <div class="row">
+              <div class="six columns">
+                  <label for="search">Search</label>
+                  <input name="query" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="true" class="u-full-width" type="search" id="search" autofocus required>
+              </div>
+              <div class="three columns">
+                  <label for="market">Market</label>
+                  <select class="u-full-width" name="market" id="market">
+                    <option selected>Women</option>
+                    <option>Men</option>
+                    <option>Kids</option>
+                    <option>All</option>
+                  </select>
+              </div>
+          </div>
+            <div id="filter-input-group" class="row flex flex-row">
+                <label for="sold">Sold
+                    <input type="radio" id="sold" name="filter" value="sold" checked="checked">
+                </label>
+                <label for="available">Available
+                    <input type="radio" id="available" name="filter" value="available">
+                </label>
+            </div>
+
+          <button type="submit" class="button button-primary">Search</button>
+          <button id="reset-search">Reset</button>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+      let resetSearchButton = document.getElementById("reset-search");
+      let searchField = document.getElementById("search");
+      resetSearchButton.addEventListener("click", function(e) {
+          e.preventDefault();
+          searchField.value = "";
+          searchField.focus();
+      });
+  </script>
+{% endblock %}
